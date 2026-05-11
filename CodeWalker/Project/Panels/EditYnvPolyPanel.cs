@@ -282,7 +282,22 @@ namespace CodeWalker.Project.Panels
 
         private void DeletePolyButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Delete Polygon TODO!");
+            if (YnvPoly == null || YnvPoly.Ynv == null) return;
+            
+            if (MessageBox.Show("Точно удалить этот полигон?", "Удаление", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                YnvPoly.Ynv.RemovePoly(YnvPoly);
+                ProjectForm.SetYnvHasChanged(true);
+                
+                if (ProjectForm.WorldForm != null)
+                {
+                    // Обновляем окно (снимаем выделение)
+                    ProjectForm.WorldForm.UpdateNavPolyGraphics(YnvPoly, false); 
+                }
+                
+                // Перекидываем фокус обратно на сам YNV файл в левом меню
+                ProjectForm.SetProjectItem(YnvPoly.Ynv); 
+            }
         }
     }
 }

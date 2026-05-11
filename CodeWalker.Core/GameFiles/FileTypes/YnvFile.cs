@@ -606,7 +606,11 @@ namespace CodeWalker.GameFiles
 
         public bool RemovePoly(YnvPoly poly)
         {
-            return false;
+            if (Polys == null || !Polys.Contains(poly)) return false;
+            Polys.Remove(poly);
+            HasChanged = true;
+            UpdateTriangleVertices(); // Обновляем графику 3D
+            return true;
         }
         public bool RemovePoint(YnvPoint point)
         {

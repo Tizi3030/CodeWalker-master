@@ -121,7 +121,9 @@ namespace CodeWalker.Project.Panels
 
             Task.Run(() =>
             {
-                float chunkSz = Math.Max(50f, chunkSizeMeters);
+                try 
+                {
+                    float chunkSz = Math.Max(50f, chunkSizeMeters);
                 float overlap = Math.Max(density * 4f, 6f);
 
                 var builder = new YnvBuilder();
@@ -876,7 +878,15 @@ namespace CodeWalker.Project.Panels
                 var statf = "{0} hit tests, {1} hits, {2} new polys";
                 var stats = string.Format(statf, hitTestCount, hitCount, newCount);
                 UpdateStatus("Process complete. " + stats);
-                GenerateComplete();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Краш генератора: " + ex.Message + "\n" + ex.StackTrace, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    GenerateComplete();
+                }
             });
         }
 

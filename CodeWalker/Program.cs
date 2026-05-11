@@ -18,6 +18,16 @@ namespace CodeWalker
         [STAThread]
         static void Main(string[] args)
         {
+            Application.ThreadException += (sender, e) =>
+            {
+                MessageBox.Show("Вылет интерфейса:\n" + e.Exception.Message + "\n\n" + e.Exception.StackTrace, "Глобальный краш", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Exception ex = e.ExceptionObject as Exception;
+                MessageBox.Show("Вылет фонового потока:\n" + (ex != null ? ex.Message + "\n\n" + ex.StackTrace : "Неизвестная ошибка"), "Глобальный краш", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
             bool menumode = false;
             bool explorermode = false;

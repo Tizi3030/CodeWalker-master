@@ -1754,6 +1754,18 @@ namespace CodeWalker.World
         public SpaceMapDataStoreNode RootNode;
         public int SplitThreshold = 10;
 
+        [ThreadStatic]
+        private static List<MapDataStoreNode> _threadItems;
+        private List<MapDataStoreNode> ThreadItems
+        {
+            get
+            {
+                if (_threadItems == null) _threadItems = new List<MapDataStoreNode>();
+                _threadItems.Clear();
+                return _threadItems;
+            }
+        }
+
         public void Init(List<MapDataStoreNode> rootnodes)
         {
             RootNode = new SpaceMapDataStoreNode();
@@ -1767,7 +1779,7 @@ namespace CodeWalker.World
 
         public List<MapDataStoreNode> GetItems(ref Vector3 p) //get items at a point, using the streaming extents
         {
-            var items = new List<MapDataStoreNode>();
+            var items = ThreadItems;
 
             if (RootNode != null)
             {
@@ -1778,7 +1790,7 @@ namespace CodeWalker.World
         }
         public List<MapDataStoreNode> GetItems(ref Vector3 min, ref Vector3 max) //get items intersecting a box, using the entities extents
         {
-            var items = new List<MapDataStoreNode>();
+            var items = ThreadItems;
 
             if (RootNode != null)
             {
@@ -1789,7 +1801,7 @@ namespace CodeWalker.World
         }
         public List<MapDataStoreNode> GetItems(ref Ray ray) //get items intersecting a ray, using the entities extents
         {
-            var items = new List<MapDataStoreNode>();
+            var items = ThreadItems;
 
             if (RootNode != null)
             {
@@ -1971,6 +1983,18 @@ namespace CodeWalker.World
         public SpaceBoundsStoreNode RootNode;
         public int SplitThreshold = 10;
 
+        [ThreadStatic]
+        private static List<BoundsStoreItem> _threadBoundsItems;
+        private List<BoundsStoreItem> ThreadBoundsItems
+        {
+            get
+            {
+                if (_threadBoundsItems == null) _threadBoundsItems = new List<BoundsStoreItem>();
+                _threadBoundsItems.Clear();
+                return _threadBoundsItems;
+            }
+        }
+
         public void Init(List<BoundsStoreItem> items)
         {
             RootNode = new SpaceBoundsStoreNode();
@@ -1984,7 +2008,7 @@ namespace CodeWalker.World
 
         public List<BoundsStoreItem> GetItems(ref Vector3 min, ref Vector3 max, bool[] layers = null)
         {
-            var items = new List<BoundsStoreItem>();
+            var items = ThreadBoundsItems;
 
             if (RootNode != null)
             {
@@ -1995,7 +2019,7 @@ namespace CodeWalker.World
         }
         public List<BoundsStoreItem> GetItems(ref Ray ray, bool[] layers = null)
         {
-            var items = new List<BoundsStoreItem>();
+            var items = ThreadBoundsItems;
 
             if (RootNode != null)
             {
